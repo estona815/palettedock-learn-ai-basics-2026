@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Extract colors from an image, give them useful interface roles, and export CSS." />
+  <title>PaletteDock — turn an image into interface colors</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="#top" aria-label="PaletteDock home"><span class="brand-mark">◩</span> PaletteDock</a>
+    <span class="masthead-note">Image → roles → real preview</span>
+  </header>
+  <main id="top">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">A SMALL DESIGN LAB</p>
+        <h1 id="page-title">A color palette is only useful when you can see it <em>working.</em></h1>
+        <p class="lede">Drop in an image, give its colors a job, and preview a page before copying a single line of CSS.</p>
+      </div>
+      <div class="hero-stamp" aria-hidden="true"><span>01</span><span>EXTRACT</span><span>02</span><span>ASSIGN</span><span>03</span><span>EXPORT</span></div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel controls" aria-labelledby="source-title">
+        <div class="panel-heading"><div><p class="step">STEP 01 / SOURCE</p><h2 id="source-title">Start with an image</h2></div><span class="panel-number">01</span></div>
+        <label class="upload" for="image-input"><span class="upload-icon" aria-hidden="true">↗</span><span><strong>Choose an image</strong><small>JPG, PNG, WebP, or SVG · stays in your browser</small></span></label>
+        <input id="image-input" type="file" accept="image/*" />
+        <div class="source-row"><span>Current source</span><strong id="source-name">Built-in landscape sample</strong></div>
+        <div class="image-wrap"><canvas id="source-canvas" width="720" height="440" role="img" aria-label="Current source image"></canvas></div>
+        <p id="image-status" class="status" role="status">Sample ready. Choose a photo to make a new palette.</p>
+        <div class="section-line"></div>
+        <div class="panel-heading compact"><div><p class="step">STEP 02 / DISCOVER</p><h2>Five colors, one starting point</h2></div><span class="panel-number">02</span></div>
+        <div id="swatches" class="swatches" aria-label="Extracted image colors"></div>
+        <p class="hint">Colors are sampled and grouped locally. Assign them below; the first guess is yours to change.</p>
+        <div class="section-line"></div>
+        <div class="panel-heading compact"><div><p class="step">STEP 03 / ASSIGN</p><h2>Give each color a role</h2></div><span class="panel-number">03</span></div>
+        <div id="role-controls" class="role-controls"></div>
+      </section>
+
+      <section class="panel results" aria-labelledby="preview-title">
+        <div class="panel-heading"><div><p class="step">LIVE PREVIEW</p><h2 id="preview-title">See the palette in context</h2></div><span class="live-pill"><span></span> LIVE</span></div>
+        <div id="preview" class="preview">
+          <div class="preview-nav"><span class="preview-logo">NORTH / FIELD</span><span class="preview-links">Journal &nbsp; Shop &nbsp; About</span></div>
+          <div class="preview-hero"><p class="preview-kicker">A SLOWER WAY OUTSIDE</p><h3>Find your<br /><i>own trail.</i></h3><p>Thoughtful gear and field notes for the days that take you further.</p><button type="button" class="preview-button">Explore the collection <span aria-hidden="true">↗</span></button></div>
+          <div class="preview-cards"><article><span>01 / FIELD NOTES</span><strong>Take the scenic route.</strong><small>Stories from a life in motion.</small></article><article><span>02 / THE GOODS</span><strong>Made to wander.</strong><small>Simple essentials for everywhere.</small></article></div>
+        </div>
+        <div class="contrast" aria-labelledby="contrast-title"><h3 id="contrast-title">Contrast check <span>GUIDANCE, NOT CERTIFICATION</span></h3><div id="contrast-results"></div></div>
+        <div class="export"><div class="export-heading"><div><p class="step">STEP 04 / TAKE IT WITH YOU</p><h2>Ready for your stylesheet</h2></div></div><pre id="css-output" tabindex="0"></pre><div class="export-actions"><button id="copy-button" type="button" class="primary-action">Copy CSS <span aria-hidden="true">↗</span></button><button id="download-button" type="button" class="secondary-action">Download .css</button></div><p id="export-status" class="status" role="status">The CSS updates whenever you change a role.</p></div>
+      </section>
+    </div>
+  </main>
+  <footer><span>PaletteDock / a browser-local prototype</span><span>Your image never leaves this page.</span></footer>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
