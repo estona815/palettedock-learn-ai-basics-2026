@@ -1,5 +1,6 @@
 import { ROLE_LABELS, extractPalette, contrastRatio, suggestRoles, cssForRoles } from './palette.js';
 import { drawSample } from './sample.js';
+import { decodeImageFile } from './decode-image.js';
 
 const canvas = document.querySelector('#source-canvas');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -78,13 +79,13 @@ function refreshPalette() {
 async function loadFile(file) {
   if (!file.type.startsWith('image/')) throw new Error('Choose a JPG, PNG, WebP, or SVG image.');
   if (file.size > 20 * 1024 * 1024) throw new Error('Choose an image smaller than 20 MB.');
-  const bitmap = await createImageBitmap(file);
+  const bitmap = await decodeImageFile(file);
   try {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const scale = Math.max(canvas.width / bitmap.width, canvas.height / bitmap.height);
     const width = bitmap.width * scale;
     const height = bitmap.height * scale;
-    ctx.drawImage(bitmap, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+    ctx.drawImage(bitmap.source, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     refreshPalette();
     sourceName.textContent = file.name;
     imageStatus.textContent = `Five colors extracted from ${file.name}. Your image stays on this device.`;
