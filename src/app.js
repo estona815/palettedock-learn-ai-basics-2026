@@ -84,10 +84,12 @@ async function loadFile(file, version) {
   try {
     if (version !== imageImportVersion) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const scale = Math.max(canvas.width / bitmap.width, canvas.height / bitmap.height);
-    const width = bitmap.width * scale;
-    const height = bitmap.height * scale;
-    ctx.drawImage(bitmap.source, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+    // Sample the whole image; transparent letterboxing is ignored by extractPalette.
+    const scale = Math.min(canvas.width / bitmap.width, canvas.height / bitmap.height);
+    // Keep thin images at least one opaque pixel high/wide and align padding to pixels.
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    ctx.drawImage(bitmap.source, Math.floor((canvas.width - width) / 2), Math.floor((canvas.height - height) / 2), width, height);
     refreshPalette();
     sourceName.textContent = file.name;
     imageStatus.textContent = `Five colors extracted from ${file.name}. Your image stays on this device.`;
