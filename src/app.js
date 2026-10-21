@@ -16,6 +16,7 @@ const input = document.querySelector('#image-input');
 
 let swatches = [];
 let roles = {};
+let imageImportVersion = 0;
 
 function renderSwatches() {
   swatchRoot.replaceChildren(...swatches.map((hex, index) => {
@@ -76,11 +77,12 @@ function refreshPalette() {
   updatePreview();
 }
 
-async function loadFile(file) {
+async function loadFile(file, version) {
   if (!file.type.startsWith('image/')) throw new Error('Choose a JPG, PNG, WebP, or SVG image.');
   if (file.size > 20 * 1024 * 1024) throw new Error('Choose an image smaller than 20 MB.');
   const bitmap = await decodeImageFile(file);
   try {
+    if (version !== imageImportVersion) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const scale = Math.max(canvas.width / bitmap.width, canvas.height / bitmap.height);
     const width = bitmap.width * scale;
@@ -97,14 +99,16 @@ async function loadFile(file) {
 input.addEventListener('change', async () => {
   const file = input.files?.[0];
   if (!file) return;
+  const version = ++imageImportVersion;
   const previousImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const previousName = sourceName.textContent;
   const previousSwatches = [...swatches];
   const previousRoles = { ...roles };
   imageStatus.textContent = 'Reading your image…';
   try {
-    await loadFile(file);
+    await loadFile(file, version);
   } catch (error) {
+    if (version !== imageImportVersion) return;
     ctx.putImageData(previousImage, 0, 0);
     swatches = previousSwatches;
     roles = previousRoles;
